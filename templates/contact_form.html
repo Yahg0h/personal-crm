@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{% if contact %}
+    Edit Contact
+{% else %}
+    Add Contact
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<!-- Contact edit/add form. Changes functionally depending on use case, with Jinja conditionals helping shape the text and action depeding on use case -->
+<div class="rbx-panel">
+    {# Check if we're editing an existing contact or adding a new one #}
+    {% if contact %}
+        <h1 class="rbx-panel-title"><i class="bi bi-pencil-square"></i> Edit Contact</h1> 
+    {% else %}
+        <h1 class="rbx-panel-title"><i class="bi bi-person-add"></i> Add New Contact</h1>
+    {% endif %}
+
+    {# If editing, pre-fill form with existing contact info; else show empty form #}
+    {% if contact %}
+        <form action="/contacts/{{ contact.id }}/edit" method="post" enctype="multipart/form-data" class="row g-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% else %}
+        <form action="/contacts/new" method="post" enctype="multipart/form-data" class="row g-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    {% endif %}
+    
+        <div class="col-12 text-start">
+            <label for="photo" class="form-label fw-semibold">
+                <i class="bi bi-image"></i> Profile Photo (Optional)
+            </label>
+            <input type="file" name="photo" class="form-control" accept="image/*">
+        </div>
+        <div class="col-md-6 text-start">
+            <label class="form-label fw-semibold">Name</label>
+            <input autocomplete="off" autofocus class="form-control" name="name" placeholder="Name" type="text" value="{% if contact %}{{ contact.name }}{% endif %}" required>
+        </div>
+        <div class="col-md-6 text-start">
+            <label class="form-label fw-semibold">Nickname</label>
+            <input autocomplete="off" class="form-control" name="nickname" placeholder="Nickname" type="text" value="{% if contact %}{{ contact.nickname }}{% endif %}">
+        </div>
+        <div class="col-md-6 text-start">
+            <label class="form-label fw-semibold">Phone</label>
+            <input autocomplete="off" class="form-control" name="phone" placeholder="Phone" type="text" value="{% if contact %}{{ contact.phone }}{% endif %}">
+        </div>
+        <div class="col-md-6 text-start">
+            <label class="form-label fw-semibold">Email</label>
+            <input autocomplete="off" class="form-control" name="email" placeholder="Email" type="text" value="{% if contact %}{{ contact.email }}{% endif %}">
+        </div>
+        <div class="col-md-6 text-start">
+            <label class="form-label fw-semibold">Birthday</label>
+            <input autocomplete="off" class="form-control" name="birthday" placeholder="Birthday (YYYY-MM-DD)" type="text" value="{% if contact %}{{ contact.birthday }}{% endif %}">
+        </div>
+        <div class="col-md-6 text-start">
+            <label class="form-label fw-semibold">Category</label>
+            <select class="form-select" name="category" required>
+                <option value="" disabled selected hidden>Choose a category</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if contact and contact.category_id == category.id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-12 text-start">
+            <label class="form-label fw-semibold">Notes</label>
+            <input autocomplete="off" class="form-control" name="notes" placeholder="Notes (eg. My cousin or best friend)" type="text" value="{% if contact %}{{ contact.notes }}{% endif %}">
+        </div>
+        {% if contact %}
+            <div class="col-12 text-start">
+                <label for="alert_days" class="form-label fw-semibold">Alert after (days):</label>
+                <input type="number" name="alert_after_days" class="form-control" value="{{ contact.alert_after_days }}" min="1" style="max-width: 150px;">
+            </div>
+        {% endif %}
+        <div class="col-12 text-end mt-4">
+            <a href="/contacts" class="btn btn-rbx-secondary me-2">Cancel</a>
+            <button class="btn btn-rbx-primary" type="submit">
+                {% if contact %}Save{% else %}Add{% endif %} Contact
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

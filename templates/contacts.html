@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Contacts
+{% endblock %}
+
+{% block main %}
+    <div>
+        <div class="rbx-panel">
+            <h1 class="rbx-panel-title">Contact List <i class="bi bi-file-person-fill"></i></h1>
+            <p class="tahoma-medium m-0">View your added contacts, edit or view their information by clicking on their name, or delete the contact.</p>
+        </div>
+        
+        <!-- Search & Filters -->
+        <div class="rbx-panel">
+            <div class="input-group mb-3">
+                <input type="text" id="search_input" class="form-control" placeholder="Search contacts...">
+                <span class="input-group-text bg-white border-start-0"><i class="bi bi-search text-muted"></i></span>
+            </div>
+            <div class="mb-3" id="search_results" style="margin-top: 10px;"></div>
+            
+            <!-- Filter using categories the user has, with the info coming from app.py -->
+            <div class="mb-4">
+                <form method="GET" action="/contacts" class="row g-2">
+                    <div class="col-md-6">
+                        <label for="category_filter" class="form-label fw-semibold mb-1"><i class="bi bi-funnel"></i> Filter by category:</label>
+                        <select id="category_filter" name="category_id" class="form-select" onchange="this.form.submit()">
+                            <option value="">All Categories</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" {% if request.args.get('category_id') == category.id|string %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Sort by A-Z, Z-A, Days since contact(Low to High and vice-versa), with the info coming from app.py -->
+                    <div class="col-md-6">
+                        <label for="sort_filter" class="form-label fw-semibold mb-1"><i class="bi bi-filter-left"></i> Sort by:</label>
+                        <select id="sort_filter" name="sort" class="form-select" onchange="this.form.submit()">
+                            <option value="">A-Z (Default)</option>
+                            <option value="name_desc" {% if request.args.get('sort') == 'name_desc' %}selected{% endif %}>Z-A</option>
+                            <option value="days_asc" {% if request.args.get('sort') == 'days_asc' %}selected{% endif %}>Days since contact (Low to High)</option>
+                            <option value="days_desc" {% if request.args.get('sort') == 'days_desc' %}selected{% endif %}>Days since contact (High to Low)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Contact list (uses table) -->
+            <div class="table-fixed-container">
+                <table class="table table-rbx m-0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Days Since Last Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Display contacts list with the info coming from app.py -->
+                    {% for contact in contacts %}
+                        <tr>
+                            <td><a href="/contacts/{{ contact.id }}" class="fw-semibold text-decoration-none" style="color: var(--rbx-sky-blue);">{{ contact.name }}</a></td>
+                            <td>{{ contact.category_name }}</td>
+                            <td>{{ contact.days_ago }}</td>
+                            <td>
+                                <a href="/contacts/{{ contact.id }}/edit" class="btn btn-sm btn-rbx-secondary py-1 px-2 me-1" title="Edit">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <form method="POST" action="/contacts/{{ contact.id }}/delete" style="display:inline;" onsubmit="showDeleteModal(event, this)">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                    <button type="submit" class="btn btn-sm btn-rbx-secondary py-1 px-2 text-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        /* This real time JavaScript search section was made with the help of artificial intelligence (Claude). */
+        document.getElementById('search_input').addEventListener('input', function(e) {
+            const query = e.target.value;
+            const resultsDiv = document.getElementById('search_results');
+
+            if (!query) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            fetch(`/api/contacts?q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let html = '';
+                    data.forEach(contact => {
+                        html += `<p><a href="/contacts/${contact.id}">${contact.name}</a></p>`;
+                    });
+                    resultsDiv.innerHTML = html;
+                });
+        });
+    </script>
+{% endblock %}

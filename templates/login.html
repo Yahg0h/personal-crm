@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 120px);">
+        <div class="rbx-panel text-center" style="width: 100%; max-width: 400px;">
+            <h1 class="rbx-panel-title mb-4 text-center">Log In</h1>
+            <form action="/login" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="mb-3">
+                    <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required>
+                </div>
+                <div class="input-group mb-3">
+                    <input class="form-control" name="password" placeholder="Password" type="password" id="loginPass" required>
+                    <button class="btn btn-outline-secondary border-start-0 bg-white" type="button" onclick="togglePasswordVisibility('loginPass', this)" style="border: 1px solid #c0c0c0;">
+                        <i class="bi bi-eye text-muted"></i>
+                    </button>
+                </div>
+                <button class="btn btn-rbx-primary w-100 mt-2" type="submit">Log In</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

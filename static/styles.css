@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+:root {
+    --rbx-blue: #0074BD;
+    --rbx-sky-blue: #00a2ff;
+    --rbx-green: #00b06f;
+    --rbx-bg: #e3e3e3;
+    --rbx-card-bg: #ffffff;
+    --rbx-border: #dcdcdc;
+    --rbx-text-dark: #393b3d;
+    --rbx-text-muted: #8a8a8a;
+}
+
+body {
+    background-color: var(--rbx-bg);
+    font-family: 'Source Sans 3', 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--rbx-text-dark);
+}
+
+/* Navbar customization */
+nav.navbar {
+    background-color: var(--rbx-blue) !important;
+    border-bottom: 1px solid rgba(0,0,0,0.15) !important;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+nav .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+nav .nav-link {
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9) !important;
+    transition: color 0.2s;
+}
+
+nav .nav-link:hover {
+    color: #ffffff !important;
+}
+
+/* Roblox panels & cards */
+.rbx-panel {
+    background-color: var(--rbx-card-bg);
+    border: 1px solid var(--rbx-border);
+    border-radius: 3px;
+    padding: 24px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.rbx-panel-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--rbx-border);
+    padding-bottom: 10px;
+}
+
+.rbx-card {
+    background-color: var(--rbx-card-bg);
+    border: 1px solid var(--rbx-border);
+    border-radius: 3px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rbx-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+/* Roblox Buttons */
+.btn-rbx-primary {
+    background-color: var(--rbx-green) !important;
+    border-color: var(--rbx-green) !important;
+    color: #ffffff !important;
+    border-radius: 3px !important;
+    font-weight: 600;
+    padding: 6px 16px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-rbx-primary:hover {
+    background-color: #00965e !important;
+    border-color: #00965e !important;
+}
+
+.btn-rbx-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-rbx-secondary {
+    background-color: #ffffff !important;
+    border: 1px solid #b8b8b8 !important;
+    color: var(--rbx-text-dark) !important;
+    border-radius: 3px !important;
+    font-weight: 600;
+    padding: 6px 16px;
+    transition: all 0.2s;
+}
+
+.btn-rbx-secondary:hover {
+    background-color: #f5f5f5 !important;
+    border-color: #a5a5a5 !important;
+}
+
+.btn-rbx-blue {
+    background-color: var(--rbx-sky-blue) !important;
+    border-color: var(--rbx-sky-blue) !important;
+    color: #ffffff !important;
+    border-radius: 3px !important;
+    font-weight: 600;
+    padding: 6px 16px;
+    transition: all 0.2s;
+}
+
+.btn-rbx-blue:hover {
+    background-color: #008be6 !important;
+    border-color: #008be6 !important;
+}
+
+/* Forms & inputs styling */
+.form-control, .form-select {
+    border-radius: 3px !important;
+    border: 1px solid #c0c0c0 !important;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    box-shadow: none !important;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--rbx-sky-blue) !important;
+}
+
+/* Tables in Roblox 2018 style */
+.table-rbx {
+    background-color: #ffffff;
+    border: 1px solid var(--rbx-border);
+    border-collapse: collapse;
+}
+
+.table-rbx th {
+    background-color: #f2f2f2 !important;
+    color: var(--rbx-text-dark) !important;
+    font-weight: 600;
+    border-bottom: 2px solid var(--rbx-border) !important;
+    padding: 12px;
+}
+
+.table-rbx td {
+    padding: 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--rbx-border);
+}
+
+.table-fixed-container {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid var(--rbx-border);
+    border-radius: 3px;
+}
+
+/* Custom list items / detail items */
+.rbx-avatar-frame {
+    border: 1px solid var(--rbx-border);
+    background-color: #f2f2f2;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.rbx-profile-header {
+    background-color: #ffffff;
+    border: 1px solid var(--rbx-border);
+    border-radius: 3px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.text-muted {
+    color: var(--rbx-text-muted) !important;
+}
+
+/* Hide native browser reveal/clear password buttons inside input boxes */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+

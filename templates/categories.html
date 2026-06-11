@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Custom Categories
+{% endblock %}
+
+{% block main %}
+<!-- Categories page where user can add or remove categories to label their contacts -->
+    <div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 120px);">
+        <div class="rbx-panel" style="width: 100%; max-width: 450px;">
+            <h1 class="rbx-panel-title text-center mb-3">Categories <i class="bi bi-ui-checks-grid text-primary"></i></h1>
+            <p class="text-muted small text-center mb-3">Add new categories to sort your contacts, or delete existing ones.</p>
+            
+            <form action="/categories" method="post" class="mb-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="mb-3">
+                    <input autocomplete="off" autofocus class="form-control" name="category_name" placeholder="Type custom category name" type="text" required>
+                </div>
+                <button class="btn btn-rbx-primary w-100" type="submit">Add Category</button>
+            </form>
+            
+            <!-- Get all categories user has from database and display them here, options to delete them are available. Info comes from app.py -->
+            <div class="border rounded-1 bg-light p-2" style="max-height: 250px; overflow-y: auto;">
+                <h6 class="fw-semibold text-center py-2 border-bottom m-0 mb-2">Created Categories:</h6>
+                {% for category in categories %}
+                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-white border border-light">
+                        <span class="fw-medium text-dark">{{ category.name }}</span>
+                        <form method="POST" action="/categories/{{ category.id }}/delete" style="display:inline;" onsubmit="showDeleteModal(event, this)">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" class="btn btn-sm btn-link text-danger p-0" title="Delete" style="border: none; background: none;">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                    <p class="text-center text-muted small py-3 m-0">No custom categories yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

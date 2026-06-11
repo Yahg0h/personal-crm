@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Contact Detail
+{% endblock %}
+
+{% block main %}
+    <div class="container-fluid p-0">
+        <!-- Contact Profile Panel (inspired by Roblox profile header) -->
+        <div class="rbx-profile-header mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-auto text-center text-md-start mb-3 mb-md-0">
+                    {% if contact.photo_path %}
+                        <img src="{{ contact.photo_path }}" alt="Contact Photo" class="rbx-avatar-frame img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="/static/uploads/def-pic.jpg" alt="Contact Photo" class="rbx-avatar-frame img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+                </div>
+
+                <div class="col-md">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                        <h1 class="m-0 fs-2 fw-bold">{{ contact.name }}</h1>
+                        <div>
+                            <a href="/contacts/{{ contact.id }}/edit" class="btn btn-rbx-secondary me-2"><i class="bi bi-pencil-square"></i> Edit Info</a>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-md-4">
+                            <div class="text-muted small fw-semibold">NICKNAME</div>
+                            <div class="fw-medium text-dark">{{ contact.nickname or 'N/A' }}</div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="text-muted small fw-semibold">EMAIL</div>
+                            <div class="fw-medium text-dark">{{ contact.email or 'N/A' }}</div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="text-muted small fw-semibold">CATEGORY</div>
+                            <span class="badge bg-secondary rounded-1">{{ contact.category_name }}</span>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="text-muted small fw-semibold">PHONE</div>
+                            <div class="fw-medium text-dark">{{ contact.phone or 'N/A' }}</div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="text-muted small fw-semibold">BIRTHDAY</div>
+                            <div class="fw-medium text-dark">{{ contact.birthday or 'N/A' }}</div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="text-muted small fw-semibold">NOTES</div>
+                            <div class="fw-medium text-dark text-truncate" title="{{ contact.notes }}">{{ contact.notes or 'N/A' }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Interaction Form Button -->
+    <div class="mt-3 mb-3 text-start">
+        <button class="btn btn-rbx-primary" data-bs-toggle="collapse" data-bs-target="#formInteract">
+            <i class="bi bi-plus-lg"></i> Add Interaction
+        </button>
+    </div>
+
+    <!-- Add Interaction Collapse Form -->
+    <div class="collapse" id="formInteract">
+        <div class="rbx-panel">
+            <h4 class="rbx-panel-title">New Interaction</h4>
+            <form action="/contacts/{{ contact.id }}/interactions" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <select name="type" class="form-select" required>
+                            <option value="" disabled selected hidden>Choose interaction type</option>
+                            <option value="call">Call</option>
+                            <option value="message">Message</option>
+                            <option value="personal meeting">Personal Meeting</option>
+                            <option value="video call">Video Call</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input autocomplete="off" class="form-control" name="interaction_date" placeholder="Date (YYYY-MM-DD)" type="text" required>
+                    </div>
+                    <div class="col-12">
+                        <textarea autocomplete="off" class="form-control" name="summary" placeholder="Summary of the interaction" rows="3" style="resize: none;"></textarea>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-rbx-blue" type="submit">Add Interaction</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div> 
+
+    <!-- Interactions List Panel -->
+    <div class="rbx-panel">
+        <h2 class="rbx-panel-title">Interactions</h2>
+        <div class="row justify-content-center">
+            {% for interaction in interactions %}
+                <div class="col-md-10 mb-3">
+                    <div class="rbx-card p-3 d-flex align-items-center justify-content-between">
+                        <div class="text-start">
+                            <h5 class="m-0 fw-semibold text-capitalize">{{ interaction.type }}</h5>
+                            <small class="text-muted d-block mb-2">{{ interaction.interaction_date }}</small>
+                            <p class="m-0 text-dark">{{ interaction.summary }}</p>
+                        </div>
+                        <div>
+                            <form method="POST" action="/interactions/{{ interaction.id }}/delete" style="display:inline;" onsubmit="showDeleteModal(event, this)">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <button type="submit" class="btn btn-sm btn-rbx-secondary text-danger" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-center text-muted m-0">No interactions found for this contact.</p>
+            {% endfor %}
+        </div>
+    </div>
+       
+{% endblock %}

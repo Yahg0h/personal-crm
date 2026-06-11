@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Error Page
+{% endblock %}
+
+{% block main %}
+    <div class="text-center mt-5">
+        <img src="/static/uploads/error_page.ico" alt="Exclamation Point" width="100" height="100">
+        <h1>An error has occurred.</h1>
+        <p>Sorry, you tried to log in or register an account more than the maximum number of times per minute.</p>
+        <a href="/" class="btn btn-rbx-blue">Go back home</a>
+    </div>
+{% endblock %}

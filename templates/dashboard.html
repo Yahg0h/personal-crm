@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Dashboard - Index
+{% endblock %}
+
+{% block main %}
+    <div>
+        <div class="rbx-panel">
+            <h1 class="rbx-panel-title"><i class="bi bi-journal-richtext"></i> Contact Dashboard</h1>
+            <p class="tahoma-medium m-0">Welcome, here you can see the latest information regarding your contacts.</p>
+        </div>
+        <!-- Shows the current contacts which alert_after_days has passed over the limit (default is 30) since the last interaction date -->
+        <div class="rbx-panel">
+            <h2 class="rbx-panel-title"><i class="bi bi-exclamation-triangle"></i> Alerts</h2>
+            <div class="d-flex flex-row overflow-auto gap-3 pb-2">
+                {% if alerts %}
+                    {% for alert in alerts %}
+                        <div class="rbx-card text-center p-3" style="min-width: 200px;">
+                            <h5 class="card-title mb-2">{{ alert.name }}</h5>
+                            <p class="card-text mb-3 text-muted">Days since last contact: {{ alert.days_ago }}</p>
+                            <a href="/contacts/{{ alert.id }}" class="btn btn-rbx-blue btn-sm w-100">View</a> 
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center w-100 text-muted m-0">No alerts.</p>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Shows the birthdays of the month from the contact list -->
+        <div class="rbx-panel">
+            <h2 class="rbx-panel-title"><i class="bi bi-cake2"></i> Upcoming Birthdays</h2>
+            <div class="d-flex flex-row overflow-auto gap-3 pb-2">
+                {% if monthly_birthdays %}
+                    {% for birthday in monthly_birthdays %}
+                        <div class="rbx-card text-center p-3" style="min-width: 200px;">
+                            <h5 class="card-title mb-2">{{ birthday.name }}</h5>
+                            <p class="card-text mb-3 text-muted">{{ birthday.birthday }}</p>
+                            <a href="/contacts/{{ birthday.id }}" class="btn btn-sm btn-rbx-blue w-100">View</a>
+                        </div>                       
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center w-100 text-muted m-0">No birthdays this month.</p>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Shows the 5 most recent registered interactions and related info -->
+        <div class="rbx-panel">
+            <h2 class="rbx-panel-title"><i class="bi bi-clock-history"></i> Recent Interactions</h2>
+            <div class="row justify-content-center">
+                {% if recent_interactions %}
+                    {% for interaction in recent_interactions %}
+                        <div class="col-md-8">
+                            <div class="rbx-card mb-3 p-3 text-center">
+                                <h5 class="card-title mb-1">{{ interaction.contact_name }}</h5>
+                                <p class="card-text text-muted mb-2">{{ interaction.type }} - {{ interaction.interaction_date }}</p>
+                                <p class="m-0">{{ interaction.summary }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center w-100 text-muted m-0">No recent interactions.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

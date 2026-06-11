@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 120px);">
+    <div class="rbx-panel text-center" style="width: 100%; max-width: 400px;">
+        <h1 class="rbx-panel-title mb-4 text-center">Sign Up</h1> 
+        <form action="/register" method="post" onsubmit="isPassEqual(event)">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="mb-3">
+                <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required>
+            </div>
+            <div class="input-group mb-3">
+                <input id="originalPass" class="form-control" name="password" placeholder="Password" type="password" required>
+                <button class="btn btn-outline-secondary border-start-0 bg-white" type="button" onclick="togglePasswordVisibility('originalPass', this)" style="border: 1px solid #c0c0c0;">
+                    <i class="bi bi-eye text-muted"></i>
+                </button>
+            </div>
+            <div class="input-group mb-3">
+                <input id="confirmPass" class="form-control" name="confirmation" placeholder="Confirm Password" type="password" required>
+                <button class="btn btn-outline-secondary border-start-0 bg-white" type="button" onclick="togglePasswordVisibility('confirmPass', this)" style="border: 1px solid #c0c0c0;">
+                    <i class="bi bi-eye text-muted"></i>
+                </button>
+            </div>
+            <div class="mb-3">
+                <span id="differentPassError" class="text-danger small fw-semibold" style="display: none;">The passwords don't match, retype them!</span>
+            </div>
+            <button class="btn btn-rbx-primary w-100 mt-2" type="submit">Register</button>
+        </form>
+    </div>
+</div>
+
+    <!--Check if the password has been inputed equally twice-->
+    <script>
+        // Get each passwords by their id, error message too
+        function isPassEqual(event) {
+            const password = document.getElementById('originalPass').value;
+            const confirmPass = document.getElementById('confirmPass').value;
+            const passError = document.getElementById('differentPassError');
+        // Check if the password is equal in both cases, if not and if yes
+        if (password !== confirmPass) {
+            event.preventDefault();
+            passError.style.display = 'block';
+        } else {
+            passError.style.display = 'none';
+        }
+    }
+    </script>
+{% endblock %}
