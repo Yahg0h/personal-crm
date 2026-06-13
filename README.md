@@ -95,7 +95,7 @@ Contains the custom stylesheet (`styles.css`), the favicon, a default profile pi
 
 ### `requirements.txt`
 
-Lists the Python dependencies:
+Here are the requirements for the application to function:
 
 ```
 flask
@@ -144,13 +144,14 @@ python3 -c "import sqlite3; sqlite3.connect('crm.db').executescript(open('schema
 ```bash
 echo "FLASK_SECRET_KEY=$(python3 -c 'import secrets; print(secrets.token_hex(32))')" > .env
 ```
- 
+> **It is required to create a .env file with a secret key created by you for the application to function;** otherwise, you will receive `RuntimeError: A secret key is required to use CSRF.` in your terminal and an error page on the application.
+
 5. Run the application
 ```bash
-python app.py
+python -m flask run
 ```
  
-6. Open http://localhost:5000 in your browser
+6. Open the created server in your browser
 7. Create an account and start adding contacts!
 ---
 
