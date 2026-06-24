@@ -31,6 +31,10 @@ def save_file(file, upload_folder):
         raise ValueError("File size exceeds 5MB limit.")
 
     if file and allowed_file(file.filename):
+        # Create photos folder if it doesn't exist (static/uploads/photos):
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder, exist_ok=True)
+
         # Generate a unique filename using uuid
         ext = file.filename.rsplit(".", 1)[1].lower()
         filename = f"{uuid.uuid4()}.{ext}"
